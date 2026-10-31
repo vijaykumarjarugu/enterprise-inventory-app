@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CoreERP | Enterprise Inventory Management</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar" aria-label="Main Navigation">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <span class="logo-box">C</span>
+          <span class="brand-name">Core<span>ERP</span></span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <span class="nav-label">OPERATIONS</span>
+        <a href="#dashboard" class="nav-item active">
+          <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+          <span>Inventory Matrix</span>
+        </a>
+        <a href="#orders" class="nav-item">
+          <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+          <span>Purchase Orders</span>
+        </a>
+        <a href="#suppliers" class="nav-item">
+          <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+          <span>Suppliers Directory</span>
+        </a>
+
+        <span class="nav-label">SYSTEM CONFIG</span>
+        <a href="#audit" class="nav-item">
+          <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <span>Audit Logs</span>
+        </a>
+        <a href="#settings" class="nav-item">
+          <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg>
+          <span>RBAC Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-user">
+        <div class="user-avatar">AD</div>
+        <div class="user-meta">
+          <span class="user-name">Admin Workspace</span>
+          <span class="user-role">Superuser</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <div class="app-body">
+      <!-- Top Contextual Bar -->
+      <header class="app-topbar">
+        <div class="topbar-search">
+          <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" placeholder="Search SKU, Serial Number, or Warehouse Location..." />
+        </div>
+        <div class="topbar-actions">
+          <span class="node-badge">Cluster: Primary-US-East</span>
+          <button class="btn btn-primary">+ Add New SKU</button>
+        </div>
+      </header>
+
+      <!-- Dashboard View -->
+      <main class="main-content">
+        <div class="content-header">
+          <div>
+            <div class="breadcrumbs">Enterprise Portal &gt; Logistics &gt; Stock Overview</div>
+            <h1 class="page-title">Inventory Operations & Analytics</h1>
+          </div>
+          <div class="quick-filters">
+            <button class="filter-chip active">All Warehouses</button>
+            <button class="filter-chip">Critical Thresholds</button>
+            <button class="filter-chip">Inbound Restocks</button>
+          </div>
+        </div>
+
+        <!-- Metric KPI Cards -->
+        <section class="kpi-grid" aria-label="Key Performance Indicators">
+          <article class="kpi-card">
+            <span class="kpi-label">TOTAL ACTIVE SKUs</span>
+            <div class="kpi-metric">14,280</div>
+            <div class="kpi-trend trend-positive">↑ +4.2% from last cycle</div>
+          </article>
+          <article class="kpi-card">
+            <span class="kpi-label">GROSS STOCK VALUE</span>
+            <div class="kpi-metric">$1,842,500</div>
+            <div class="kpi-trend trend-neutral">Valuation: FIFO Basis</div>
+          </article>
+          <article class="kpi-card">
+            <span class="kpi-label">CRITICAL REORDER ALERTS</span>
+            <div class="kpi-metric metric-danger">18 Items</div>
+            <div class="kpi-trend trend-negative">Requires immediate PO</div>
+          </article>
+          <article class="kpi-card">
+            <span class="kpi-label">SYNC INTEGRITY</span>
+            <div class="kpi-metric">99.98%</div>
+            <div class="kpi-trend trend-positive">PostgreSQL Connected</div>
+          </article>
+        </section>
+
+        <!-- Main Data Table -->
+        <section class="table-section">
+          <div class="table-toolbar">
+            <h2 class="section-heading">Active Warehouse Inventory Catalog</h2>
+            <div class="toolbar-controls">
+              <select class="control-select">
+                <option>Filter Category: All</option>
+                <option>Compute Hardware</option>
+                <option>Networking Devices</option>
+                <option>Power Infrastructure</option>
+              </select>
+              <button class="btn btn-secondary">Export CSV</button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>SKU IDENTIFIER</th>
+                  <th>ITEM NAME</th>
+                  <th>CATEGORY</th>
+                  <th>WAREHOUSE BIN</th>
+                  <th>AVAILABLE QTY</th>
+                  <th>REORDER POINT</th>
+                  <th>STATUS</th>
+                  <th class="text-right">ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>SKU-SRV-9012</code></td>
+                  <td><strong>Dell PowerEdge R750 Server</strong></td>
+                  <td>Compute Hardware</td>
+                  <td>WH-A / Rack-04B</td>
+                  <td>14 Units</td>
+                  <td>10 Units</td>
+                  <td><span class="badge badge-success">Optimal</span></td>
+                  <td class="text-right">
+                    <button class="action-btn">Edit</button>
+                    <button class="action-btn">Audit</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>SKU-NET-4401</code></td>
+                  <td><strong>Cisco Catalyst 9300 48-Port</strong></td>
+                  <td>Networking Devices</td>
+                  <td>WH-B / Bin-11A</td>
+                  <td>4 Units</td>
+                  <td>8 Units</td>
+                  <td><span class="badge badge-danger">Low Stock</span></td>
+                  <td class="text-right">
+                    <button class="action-btn">Edit</button>
+                    <button class="action-btn">Audit</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>SKU-PWR-3310</code></td>
+                  <td><strong>APC Smart-UPS RT 3000VA</strong></td>
+                  <td>Power Infrastructure</td>
+                  <td>WH-A / Storage-02</td>
