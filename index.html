@@ -22,25 +22,25 @@
 
       <nav class="sidebar-nav">
         <span class="nav-label">OPERATIONS</span>
-        <a href="#dashboard" class="nav-item active">
+        <a href="#dashboard" class="nav-item active" onclick="switchView('dashboard', this)">
           <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
           <span>Inventory Matrix</span>
         </a>
-        <a href="#orders" class="nav-item">
+        <a href="#orders" class="nav-item" onclick="switchView('orders', this)">
           <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
           <span>Purchase Orders</span>
         </a>
-        <a href="#suppliers" class="nav-item">
+        <a href="#suppliers" class="nav-item" onclick="switchView('suppliers', this)">
           <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
           <span>Suppliers Directory</span>
         </a>
 
         <span class="nav-label">SYSTEM CONFIG</span>
-        <a href="#audit" class="nav-item">
+        <a href="#audit" class="nav-item" onclick="switchView('audit', this)">
           <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
           <span>Audit Logs</span>
         </a>
-        <a href="#settings" class="nav-item">
+        <a href="#settings" class="nav-item" onclick="switchView('settings', this)">
           <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg>
           <span>RBAC Settings</span>
         </a>
@@ -55,9 +55,8 @@
       </div>
     </aside>
 
-    <!-- Main Workspace -->
+    <!-- App Body -->
     <div class="app-body">
-      <!-- Top Contextual Bar -->
       <header class="app-topbar">
         <div class="topbar-search">
           <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
@@ -69,102 +68,465 @@
         </div>
       </header>
 
-      <!-- Dashboard View -->
       <main class="main-content">
-        <div class="content-header">
-          <div>
-            <div class="breadcrumbs">Enterprise Portal &gt; Logistics &gt; Stock Overview</div>
-            <h1 class="page-title">Inventory Operations & Analytics</h1>
-          </div>
-          <div class="quick-filters">
-            <button class="filter-chip active">All Warehouses</button>
-            <button class="filter-chip">Critical Thresholds</button>
-            <button class="filter-chip">Inbound Restocks</button>
-          </div>
-        </div>
 
-        <!-- Metric KPI Cards -->
-        <section class="kpi-grid" aria-label="Key Performance Indicators">
-          <article class="kpi-card">
-            <span class="kpi-label">TOTAL ACTIVE SKUs</span>
-            <div class="kpi-metric">14,280</div>
-            <div class="kpi-trend trend-positive">↑ +4.2% from last cycle</div>
-          </article>
-          <article class="kpi-card">
-            <span class="kpi-label">GROSS STOCK VALUE</span>
-            <div class="kpi-metric">$1,842,500</div>
-            <div class="kpi-trend trend-neutral">Valuation: FIFO Basis</div>
-          </article>
-          <article class="kpi-card">
-            <span class="kpi-label">CRITICAL REORDER ALERTS</span>
-            <div class="kpi-metric metric-danger">18 Items</div>
-            <div class="kpi-trend trend-negative">Requires immediate PO</div>
-          </article>
-          <article class="kpi-card">
-            <span class="kpi-label">SYNC INTEGRITY</span>
-            <div class="kpi-metric">99.98%</div>
-            <div class="kpi-trend trend-positive">PostgreSQL Connected</div>
-          </article>
-        </section>
-
-        <!-- Main Data Table -->
-        <section class="table-section">
-          <div class="table-toolbar">
-            <h2 class="section-heading">Active Warehouse Inventory Catalog</h2>
-            <div class="toolbar-controls">
-              <select class="control-select">
-                <option>Filter Category: All</option>
-                <option>Compute Hardware</option>
-                <option>Networking Devices</option>
-                <option>Power Infrastructure</option>
-              </select>
-              <button class="btn btn-secondary">Export CSV</button>
+        <!-- 1. INVENTORY MATRIX VIEW -->
+        <div id="view-dashboard" class="view-panel active-view">
+          <div class="content-header">
+            <div>
+              <div class="breadcrumbs">Enterprise Portal &gt; Logistics &gt; Stock Overview</div>
+              <h1 class="page-title">Inventory Operations & Analytics</h1>
+            </div>
+            <div class="quick-filters">
+              <button class="filter-chip active">All Warehouses</button>
+              <button class="filter-chip">Critical Thresholds</button>
+              <button class="filter-chip">Inbound Restocks</button>
             </div>
           </div>
 
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>SKU IDENTIFIER</th>
-                  <th>ITEM NAME</th>
-                  <th>CATEGORY</th>
-                  <th>WAREHOUSE BIN</th>
-                  <th>AVAILABLE QTY</th>
-                  <th>REORDER POINT</th>
-                  <th>STATUS</th>
-                  <th class="text-right">ACTIONS</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><code>SKU-SRV-9012</code></td>
-                  <td><strong>Dell PowerEdge R750 Server</strong></td>
-                  <td>Compute Hardware</td>
-                  <td>WH-A / Rack-04B</td>
-                  <td>14 Units</td>
-                  <td>10 Units</td>
-                  <td><span class="badge badge-success">Optimal</span></td>
-                  <td class="text-right">
-                    <button class="action-btn">Edit</button>
-                    <button class="action-btn">Audit</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td><code>SKU-NET-4401</code></td>
-                  <td><strong>Cisco Catalyst 9300 48-Port</strong></td>
-                  <td>Networking Devices</td>
-                  <td>WH-B / Bin-11A</td>
-                  <td>4 Units</td>
-                  <td>8 Units</td>
-                  <td><span class="badge badge-danger">Low Stock</span></td>
-                  <td class="text-right">
-                    <button class="action-btn">Edit</button>
-                    <button class="action-btn">Audit</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td><code>SKU-PWR-3310</code></td>
-                  <td><strong>APC Smart-UPS RT 3000VA</strong></td>
-                  <td>Power Infrastructure</td>
-                  <td>WH-A / Storage-02</td>
+          <section class="kpi-grid">
+            <article class="kpi-card">
+              <span class="kpi-label">TOTAL ACTIVE SKUs</span>
+              <div class="kpi-metric">14,280</div>
+              <div class="kpi-trend trend-positive">↑ +4.2% from last cycle</div>
+            </article>
+            <article class="kpi-card">
+              <span class="kpi-label">GROSS STOCK VALUE</span>
+              <div class="kpi-metric">$1,842,500</div>
+              <div class="kpi-trend trend-neutral">Valuation: FIFO Basis</div>
+            </article>
+            <article class="kpi-card">
+              <span class="kpi-label">CRITICAL REORDER ALERTS</span>
+              <div class="kpi-metric metric-danger">18 Items</div>
+              <div class="kpi-trend trend-negative">Requires immediate PO</div>
+            </article>
+            <article class="kpi-card">
+              <span class="kpi-label">SYNC INTEGRITY</span>
+              <div class="kpi-metric">99.98%</div>
+              <div class="kpi-trend trend-positive">PostgreSQL Connected</div>
+            </article>
+          </section>
+
+          <section class="table-section">
+            <div class="table-toolbar">
+              <h2 class="section-heading">Active Warehouse Inventory Catalog</h2>
+              <div class="toolbar-controls">
+                <select class="control-select">
+                  <option>Filter Category: All</option>
+                  <option>Compute Hardware</option>
+                  <option>Networking Devices</option>
+                  <option>Power Infrastructure</option>
+                </select>
+                <button class="btn btn-secondary">Export CSV</button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>SKU IDENTIFIER</th>
+                    <th>ITEM NAME</th>
+                    <th>CATEGORY</th>
+                    <th>WAREHOUSE BIN</th>
+                    <th>AVAILABLE QTY</th>
+                    <th>REORDER POINT</th>
+                    <th>STATUS</th>
+                    <th class="text-right">ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="badge-code">SKU-SRV-9012</span></td>
+                    <td><strong>Dell PowerEdge R750 Server</strong></td>
+                    <td>Compute Hardware</td>
+                    <td>WH-A / Rack-04B</td>
+                    <td>14 Units</td>
+                    <td>10 Units</td>
+                    <td><span class="badge badge-success">Optimal</span></td>
+                    <td class="text-right">
+                      <button class="action-btn">Edit</button>
+                      <button class="action-btn">Audit</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge-code">SKU-NET-4401</span></td>
+                    <td><strong>Cisco Catalyst 9300 48-Port</strong></td>
+                    <td>Networking Devices</td>
+                    <td>WH-B / Bin-11A</td>
+                    <td>4 Units</td>
+                    <td>8 Units</td>
+                    <td><span class="badge badge-danger">Low Stock</span></td>
+                    <td class="text-right">
+                      <button class="action-btn">Edit</button>
+                      <button class="action-btn">Audit</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge-code">SKU-PWR-3310</span></td>
+                    <td><strong>APC Smart-UPS RT 3000VA</strong></td>
+                    <td>Power Infrastructure</td>
+                    <td>WH-A / Storage-02</td>
+                    <td>22 Units</td>
+                    <td>5 Units</td>
+                    <td><span class="badge badge-success">Optimal</span></td>
+                    <td class="text-right">
+                      <button class="action-btn">Edit</button>
+                      <button class="action-btn">Audit</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge-code">SKU-CAB-1092</span></td>
+                    <td><strong>Cat6A Shielded Patch Cable (1000ft)</strong></td>
+                    <td>Networking Devices</td>
+                    <td>WH-C / Bulk-Shelf</td>
+                    <td>2 Spools</td>
+                    <td>5 Spools</td>
+                    <td><span class="badge badge-warning">Reorder Sent</span></td>
+                    <td class="text-right">
+                      <button class="action-btn">Edit</button>
+                      <button class="action-btn">Audit</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <footer class="table-pagination">
+              <span class="pagination-info">Showing 1 to 4 of 14,280 entries</span>
+              <div class="pagination-buttons">
+                <button class="btn btn-secondary btn-sm" disabled>Previous</button>
+                <button class="btn btn-secondary btn-sm">Next</button>
+              </div>
+            </footer>
+          </section>
+        </div>
+
+        <!-- 2. PURCHASE ORDERS VIEW -->
+        <div id="view-orders" class="view-panel">
+          <div class="content-header">
+            <div>
+              <div class="breadcrumbs">Enterprise Portal &gt; Procurement &gt; Requisition</div>
+              <h1 class="page-title">Purchase Orders & Inbound Shipments</h1>
+            </div>
+            <div class="quick-filters">
+              <button class="filter-chip active">All POs</button>
+              <button class="filter-chip">Pending Dispatch</button>
+              <button class="filter-chip">Customs Clearance</button>
+            </div>
+          </div>
+
+          <section class="kpi-grid">
+            <article class="kpi-card">
+              <span class="kpi-label">PENDING REQUISITIONS</span>
+              <div class="kpi-metric">24 Orders</div>
+              <div class="kpi-trend trend-neutral">Awaiting Manager Approval</div>
+            </article>
+            <article class="kpi-card">
+              <span class="kpi-label">IN-TRANSIT VALUE</span>
+              <div class="kpi-metric">$482,900</div>
+              <div class="kpi-trend trend-positive">8 Vessels Scheduled</div>
+            </article>
+            <article class="kpi-card">
+              <span class="kpi-label">AVERAGE FULFILLMENT</span>
+              <div class="kpi-metric">4.2 Days</div>
+              <div class="kpi-trend trend-positive">↑ 18% improvement</div>
+            </article>
+            <article class="kpi-card">
+              <span class="kpi-label">DISPUTED DELIVERIES</span>
+              <div class="kpi-metric metric-danger">1 Consignment</div>
+              <div class="kpi-trend trend-negative">RMA Inspection Flagged</div>
+            </article>
+          </section>
+
+          <section class="table-section">
+            <div class="table-toolbar">
+              <h2 class="section-heading">Active Purchase Order Manifest</h2>
+              <button class="btn btn-primary">+ Generate PO</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>PO NUMBER</th>
+                    <th>VENDOR</th>
+                    <th>DESTINATION</th>
+                    <th>TOTAL LINE ITEMS</th>
+                    <th>AMOUNT</th>
+                    <th>STATUS</th>
+                    <th class="text-right">ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="badge-code">PO-2026-8801</span></td>
+                    <td><strong>Dell Global Logistics</strong></td>
+                    <td>Warehouse Alpha (Austin)</td>
+                    <td>14 Servers</td>
+                    <td>$114,800</td>
+                    <td><span class="badge badge-success">Dispatched</span></td>
+                    <td class="text-right"><button class="action-btn">Track</button></td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge-code">PO-2026-8802</span></td>
+                    <td><strong>Cisco Systems Direct</strong></td>
+                    <td>Warehouse Beta (San Jose)</td>
+                    <td>40 Switches</td>
+                    <td>$86,000</td>
+                    <td><span class="badge badge-warning">Customs Check</span></td>
+                    <td class="text-right"><button class="action-btn">Track</button></td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge-code">PO-2026-8803</span></td>
+                    <td><strong>Schneider Electric</strong></td>
+                    <td>Warehouse Alpha (Austin)</td>
+                    <td>10 UPS Units</td>
+                    <td>$32,400</td>
+                    <td><span class="badge badge-success">Received</span></td>
+                    <td class="text-right"><button class="action-btn">Manifest</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <!-- 3. SUPPLIERS DIRECTORY VIEW -->
+        <div id="view-suppliers" class="view-panel">
+          <div class="content-header">
+            <div>
+              <div class="breadcrumbs">Enterprise Portal &gt; Procurement &gt; Suppliers</div>
+              <h1 class="page-title">Authorized Vendor Directory</h1>
+            </div>
+            <button class="btn btn-primary">+ Onboard Vendor</button>
+          </div>
+
+          <section class="kpi-grid">
+            <article class="kpi-card">
+              <span class="kpi-label">CERTIFIED VENDORS</span>
+              <div class="kpi-metric">48 Partners</div>
+              <div class="kpi-trend trend-positive">100% Compliance Cleared</div>
+            </article>
+            <article class="kpi-card">
+              <span class="kpi-label">AVERAGE SLA SCORE</span>
+              <div class="kpi-metric">98.4%</div>
+              <div class="kpi-trend trend-positive">Tier-1 Threshold: 95%</div>
+            </article>
+            <article class="kpi-card">
+              <span class="kpi-label">ANNUAL SPEND ACCRUAL</span>
+              <div class="kpi-metric">$5,240,000</div>
+              <div class="kpi-trend trend-neutral">FY 2026 Contracted</div>
+            </article>
+            <article class="kpi-card">
+              <span class="kpi-label">CONTRACT RENEWALS</span>
+              <div class="kpi-metric metric-danger">3 Expiring</div>
+              <div class="kpi-trend trend-negative">Due in next 30 days</div>
+            </article>
+          </section>
+
+          <section class="table-section">
+            <div class="table-toolbar">
+              <h2 class="section-heading">Active Supplier Master List</h2>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>SUPPLIER CODE</th>
+                    <th>CORPORATE ENTITY</th>
+                    <th>TIER CATEGORY</th>
+                    <th>CONTRACT TERMS</th>
+                    <th>SLA RATING</th>
+                    <th>STATUS</th>
+                    <th class="text-right">ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="badge-code">VND-DL-01</span></td>
+                    <td><strong>Dell Enterprise Corp</strong></td>
+                    <td>Tier 1 (Core Hardware)</td>
+                    <td>Net-30 / FOB Dest</td>
+                    <td>99.2%</td>
+                    <td><span class="badge badge-success">Active</span></td>
+                    <td class="text-right"><button class="action-btn">Agreement</button></td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge-code">VND-CS-02</span></td>
+                    <td><strong>Cisco Hardware Global</strong></td>
+                    <td>Tier 1 (Networking)</td>
+                    <td>Net-60 / CIF Air</td>
+                    <td>97.8%</td>
+                    <td><span class="badge badge-success">Active</span></td>
+                    <td class="text-right"><button class="action-btn">Agreement</button></td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge-code">VND-APC-03</span></td>
+                    <td><strong>APC Schneider Electric</strong></td>
+                    <td>Tier 2 (Power Systems)</td>
+                    <td>Net-45 / Ex Works</td>
+                    <td>94.1%</td>
+                    <td><span class="badge badge-warning">Review Needed</span></td>
+                    <td class="text-right"><button class="action-btn">Agreement</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <!-- 4. AUDIT LOGS VIEW -->
+        <div id="view-audit" class="view-panel">
+          <div class="content-header">
+            <div>
+              <div class="breadcrumbs">Enterprise Portal &gt; Governance &gt; Compliance</div>
+              <h1 class="page-title">System Audit & Compliance Trails</h1>
+            </div>
+            <div class="quick-filters">
+              <button class="filter-chip active">All Security Events</button>
+              <button class="filter-chip">Stock Adjustments</button>
+              <button class="filter-chip">Access Elevation</button>
+            </div>
+          </div>
+
+          <section class="table-section">
+            <div class="table-toolbar">
+              <h2 class="section-heading">Immutable Blockchain-Verified Activity Log</h2>
+              <button class="btn btn-secondary">Export Forensic Dump</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>TIMESTAMP (UTC)</th>
+                    <th>OPERATOR</th>
+                    <th>ROLE</th>
+                    <th>TARGET RESOURCE</th>
+                    <th>ACTION EXECUTED</th>
+                    <th>STATUS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>2026-10-31 08:14:22</code></td>
+                    <td><strong>vijay.admin</strong></td>
+                    <td>Superuser</td>
+                    <td><code>SKU-SRV-9012</code></td>
+                    <td>Reorder point adjusted (8 → 10)</td>
+                    <td><span class="badge badge-success">Verified</span></td>
+                  </tr>
+                  <tr>
+                    <td><code>2026-10-31 07:42:01</code></td>
+                    <td><strong>ops.lead01</strong></td>
+                    <td>Inventory Lead</td>
+                    <td><code>WH-B / Bin-11A</code></td>
+                    <td>Stock count decrement (-2 Cisco 9300)</td>
+                    <td><span class="badge badge-success">Verified</span></td>
+                  </tr>
+                  <tr>
+                    <td><code>2026-10-31 05:22:19</code></td>
+                    <td><strong>automated.sync</strong></td>
+                    <td>Service Daemon</td>
+                    <td><code>PostgreSQL RDS</code></td>
+                    <td>Automated database health check</td>
+                    <td><span class="badge badge-success">Verified</span></td>
+                  </tr>
+                  <tr>
+                    <td><code>2026-10-30 23:10:44</code></td>
+                    <td><strong>unknown.ip (45.12.9)</strong></td>
+                    <td>Guest</td>
+                    <td><code>/api/v1/auth/login</code></td>
+                    <td>Failed brute force SSH attempt blocked</td>
+                    <td><span class="badge badge-danger">Blocked</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <!-- 5. RBAC SETTINGS VIEW -->
+        <div id="view-settings" class="view-panel">
+          <div class="content-header">
+            <div>
+              <div class="breadcrumbs">Enterprise Portal &gt; Security &gt; Access Control</div>
+              <h1 class="page-title">Role-Based Access Control (RBAC)</h1>
+            </div>
+            <button class="btn btn-primary">+ Create New Role</button>
+          </div>
+
+          <section class="table-section">
+            <div class="table-toolbar">
+              <h2 class="section-heading">Configured User Permission Matrices</h2>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ROLE NAME</th>
+                    <th>ASSIGNED USERS</th>
+                    <th>VIEW INVENTORY</th>
+                    <th>MUTATE STOCK</th>
+                    <th>TRIGGER PO</th>
+                    <th>SECURITY AUDIT</th>
+                    <th class="text-right">ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Super Administrator</strong></td>
+                    <td>2 Members</td>
+                    <td><span class="badge badge-success">Full Access</span></td>
+                    <td><span class="badge badge-success">Granted</span></td>
+                    <td><span class="badge badge-success">Granted</span></td>
+                    <td><span class="badge badge-success">Granted</span></td>
+                    <td class="text-right"><button class="action-btn">Configure</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Inventory Operator</strong></td>
+                    <td>14 Members</td>
+                    <td><span class="badge badge-success">Full Access</span></td>
+                    <td><span class="badge badge-success">Granted</span></td>
+                    <td><span class="badge badge-danger">Denied</span></td>
+                    <td><span class="badge badge-danger">Denied</span></td>
+                    <td class="text-right"><button class="action-btn">Configure</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Procurement Officer</strong></td>
+                    <td>5 Members</td>
+                    <td><span class="badge badge-success">Full Access</span></td>
+                    <td><span class="badge badge-danger">Denied</span></td>
+                    <td><span class="badge badge-success">Granted</span></td>
+                    <td><span class="badge badge-danger">Denied</span></td>
+                    <td class="text-right"><button class="action-btn">Configure</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Auditor / Compliance</strong></td>
+                    <td>3 Members</td>
+                    <td><span class="badge badge-success">Read-Only</span></td>
+                    <td><span class="badge badge-danger">Denied</span></td>
+                    <td><span class="badge badge-danger">Denied</span></td>
+                    <td><span class="badge badge-success">Full Access</span></td>
+                    <td class="text-right"><button class="action-btn">Configure</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    function switchView(viewId, element) {
+      document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active-view'));
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      const activePanel = document.getElementById('view-' + viewId);
+      if (activePanel) activePanel.classList.add('active-view');
+      element.classList.add('active');
+    }
+  </script>
+</body>
+</html>
