@@ -520,6 +520,8 @@
   </div>
 
   <script>
+    const API_BASE = 'https://enterprise-inventory-api.onrender.com/api/v1';
+
     function switchView(viewId, element) {
       document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active-view'));
       document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
@@ -527,6 +529,45 @@
       if (activePanel) activePanel.classList.add('active-view');
       element.classList.add('active');
     }
+
+    async function fetchInventoryFromBackend() {
+      try {
+        const response = await fetch(`${API_BASE}/inventory`);
+        const result = await response.json();
+
+        if (result.success && result.data.length > 0) {
+          const tbody = document.querySelector('#view-dashboard .data-table tbody');
+          if (!tbody) return;
+
+          tbody.innerHTML = result.data.map(item => `
+            <tr>
+              <td><span class="badge-code">${item.sku}</span></td>
+              <td><strong>${item.name}</strong></td>
+              <td>${item.category}</td>
+              <td>${item.bin}</td>
+              <td>${item.qty} Units</td>
+              <td>${item.reorderPoint} Units</td>
+              <td>
+                <span class="badge ${item.status === 'Optimal' ? 'badge-success' : (item.status === 'Low Stock' ? 'badge-danger' : 'badge-warning')}">
+                  ${item.status}
+                </span>
+              </td>
+              <td class="text-right">
+                <button class="action-btn">Edit</button>
+                <button class="action-btn">Audit</button>
+              </td>
+            </tr>
+          `).join('');
+
+          const kpiCount = document.querySelector('.kpi-metric');
+          if (kpiCount) kpiCount.textContent = result.count.toLocaleString();
+        }
+      } catch (err) {
+        console.warn('Backend server cold start or unreachable. Fallback cache intact.', err);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchInventoryFromBackend);
   </script>
 </body>
 </html>
