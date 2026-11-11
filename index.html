@@ -546,7 +546,7 @@
               <td>${item.category}</td>
               <td>${item.bin}</td>
               <td>${item.qty} Units</td>
-              <td>${item.reorderPoint} Units</td>
+              <td>${item.reorder_point ?? item.reorderPoint ?? 0} Units</td>
               <td>
                 <span class="badge ${item.status === 'Optimal' ? 'badge-success' : (item.status === 'Low Stock' ? 'badge-danger' : 'badge-warning')}">
                   ${item.status}
