@@ -1,12 +1,11 @@
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { supabase } from '../db.js';
 
 const router = Router();
 
-export const users = [];
-
-// POST /api/v1/auth/register
+// POST /api/v1/auth/register (Objective 2: Securely store credentials in DB)
 router.post('/register', async (req, res) => {
   try {
     const { username, email, password, role } = req.body;
@@ -18,7 +17,12 @@ router.post('/register', async (req, res) => {
       });
     }
 
-    const existingUser = users.find((u) => u.email === email);
+    const { data: existingUser } = await supabase
+      .from('users')
+      .select('id')
+      .eq('email', email)
+      .single();
+
     if (existingUser) {
       return res.status(409).json({
         success: false,
@@ -29,26 +33,25 @@ router.post('/register', async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const newUser = {
-      id: `usr_${Date.now()}`,
-      username,
-      email,
-      password: hashedPassword,
-      role: role || 'Operator',
-      createdAt: new Date().toISOString()
-    };
+    const { data, error } = await supabase
+      .from('users')
+      .insert([
+        {
+          username,
+          email,
+          password: hashedPassword,
+          role: role || 'Operator'
+        }
+      ])
+      .select('id, username, email, role, created_at')
+      .single();
 
-    users.push(newUser);
+    if (error) throw error;
 
     return res.status(201).json({
       success: true,
-      message: 'User registered successfully',
-      data: {
-        id: newUser.id,
-        username: newUser.username,
-        email: newUser.email,
-        role: newUser.role
-      }
+      message: 'User credentials stored securely in PostgreSQL',
+      data
     });
   } catch (err) {
     return res.status(500).json({ success: false, message: err.message });
@@ -67,8 +70,13 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    const user = users.find((u) => u.email === email);
-    if (!user) {
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('email', email)
+      .single();
+
+    if (error || !user) {
       return res.status(401).json({
         success: false,
         message: 'Invalid email or password'

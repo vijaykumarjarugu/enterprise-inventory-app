@@ -1,46 +1,60 @@
 import { Router } from 'express';
 import { verifyToken } from '../middleware/auth.js';
+import { supabase } from '../db.js';
 
 const router = Router();
 
-export const inventoryItems = [
-  {
-    id: 'item_1',
-    sku: 'SKU-SRV-9012',
-    name: 'Dell PowerEdge R750 Server',
-    category: 'Compute Hardware',
-    bin: 'WH-A / Rack-04B',
-    qty: 14,
-    reorderPoint: 10,
-    status: 'Optimal',
-    createdBy: 'admin'
-  },
-  {
-    id: 'item_2',
-    sku: 'SKU-NET-4401',
-    name: 'Cisco Catalyst 9300 48-Port',
-    category: 'Networking Devices',
-    bin: 'WH-B / Bin-11A',
-    qty: 4,
-    reorderPoint: 8,
-    status: 'Low Stock',
-    createdBy: 'admin'
-  }
-];
+// GET /api/v1/inventory (Objective 3: Retrieve all items from DB)
+router.get('/', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('items')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-// GET /api/v1/inventory (Fetch records)
-router.get('/', (req, res) => {
-  res.status(200).json({
-    success: true,
-    count: inventoryItems.length,
-    data: inventoryItems
-  });
+    if (error) throw error;
+
+    return res.status(200).json({
+      success: true,
+      count: data.length,
+      data
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message });
+  }
 });
 
-// POST /api/v1/inventory (Create new record - Protected route)
-router.post('/', verifyToken, (req, res) => {
+// GET /api/v1/inventory/:id (Objective 4: Individual item detail retrieval)
+router.get('/:id', async (req, res) => {
   try {
-    const { sku, name, category, bin, qty, reorderPoint } = req.body;
+    const { id } = req.params;
+
+    const { data, error } = await supabase
+      .from('items')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error || !data) {
+      return res.status(404).json({
+        success: false,
+        message: 'Record not found'
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// POST /api/v1/inventory (Objective 2: Store record data securely in DB)
+router.post('/', verifyToken, async (req, res) => {
+  try {
+    const { sku, name, category, bin, qty, reorderPoint, description } = req.body;
 
     if (!sku || !name || !category || qty === undefined) {
       return res.status(400).json({
@@ -49,25 +63,32 @@ router.post('/', verifyToken, (req, res) => {
       });
     }
 
-    const newItem = {
-      id: `item_${Date.now()}`,
-      sku,
-      name,
-      category,
-      bin: bin || 'Unassigned',
-      qty: Number(qty),
-      reorderPoint: Number(reorderPoint) || 5,
-      status: Number(qty) <= (Number(reorderPoint) || 5) ? 'Low Stock' : 'Optimal',
-      createdBy: req.user.username,
-      createdAt: new Date().toISOString()
-    };
+    const calculatedStatus = Number(qty) <= (Number(reorderPoint) || 5) ? 'Low Stock' : 'Optimal';
 
-    inventoryItems.unshift(newItem);
+    const { data, error } = await supabase
+      .from('items')
+      .insert([
+        {
+          sku,
+          name,
+          category,
+          bin: bin || 'WH-General',
+          qty: Number(qty),
+          reorder_point: Number(reorderPoint) || 5,
+          status: calculatedStatus,
+          description: description || 'Catalog entry registered via persistent API.',
+          created_by: req.user.username
+        }
+      ])
+      .select()
+      .single();
+
+    if (error) throw error;
 
     return res.status(201).json({
       success: true,
-      message: 'Inventory record created successfully',
-      data: newItem
+      message: 'Record persisted to PostgreSQL database',
+      data
     });
   } catch (err) {
     return res.status(500).json({ success: false, message: err.message });
