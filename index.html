@@ -534,7 +534,829 @@
       try {
         const response = await fetch(`${API_BASE}/inventory`);
         const result = await response.json();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CoreERP | Enterprise Inventory Management</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Modal & CRUD Controls Styling matching CoreERP Theme */
+    .erp-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.72);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+    .erp-modal-backdrop.open {
+      display: flex;
+    }
+    .erp-modal {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 520px;
+      color: #f8fafc;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+    .erp-modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .erp-modal-header h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    .erp-modal-close {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.4rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .erp-modal-close:hover {
+      color: #ffffff;
+    }
+    .erp-modal-body {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .form-field label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 0.6rem 0.75rem;
+      color: #f8fafc;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+    .erp-modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #334155;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      background: #0f172a;
+    }
+    .action-btn-danger {
+      color: #f87171 !important;
+      border-color: rgba(248, 113, 113, 0.3) !important;
+    }
+    .action-btn-danger:hover {
+      background: rgba(248, 113, 113, 0.15) !important;
+    }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #334155;
+      font-size: 0.9rem;
+    }
+    .detail-row span:first-child {
+      color: #94a3b8;
+    }
+    .toast-banner {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: #0f172a;
+      border: 1px solid #3b82f6;
+      color: #f8fafc;
+      padding: 0.85rem 1.25rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      z-index: 1100;
+      display: none;
+    }
+    .toast-banner.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar" aria-label="Main Navigation">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <span class="logo-box">C</span>
+          <span class="brand-name">Core<span>ERP</span></span>
+        </div>
+      </div>
 
+      <nav class="sidebar-nav">
+        <span class="nav-label">OPERATIONS</span>
+        <a href="#dashboard" class="nav-item active" onclick="switchView('dashboard', this)">
+          <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+          <span>Inventory Matrix</span>
+        </a>
+        <a href="#orders" class="nav-item" onclick="switchView('orders', this)">
+          <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+          <span>Purchase Orders</span>
+        </a>
+        <a href="#suppliers" class="nav-item" onclick="switchView('suppliers', this)">
+          <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+          <span>Suppliers Directory</span>
+        </a>
+
+        <span class="nav-label">SYSTEM CONFIG</span>
+        <a href="#audit" class="nav-item" onclick="switchView('audit', this)">
+          <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <span>Audit Logs</span>
+        </a>
+        <a href="#settings" class="nav-item" onclick="switchView('settings', this)">
+          <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg>
+          <span>RBAC Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-user">
+        <div class="user-avatar">AD</div>
+        <div class="user-meta">
+          <span class="user-name">Admin Workspace</span>
+          <span class="user-role">Superuser</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- App Body -->
+    <div class="app-body">
+      <header class="app-topbar">
+        <div class="topbar-search">
+          <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" id="global-search-input" placeholder="Search SKU, Item Name, or Warehouse Bin..." />
+        </div>
+        <div class="topbar-actions">
+          <span class="node-badge">Cluster: Primary-US-East</span>
+          <button class="btn btn-primary" onclick="openCreateModal()">+ Add New SKU</button>
+        </div>
+      </header>
+
+      <main class="main-content">
+
+        <!-- 1. INVENTORY MATRIX VIEW -->
+        <div id="view-dashboard" class="view-panel active-view">
+          <div class="content-header">
+            <div>
+              <div class="breadcrumbs">Enterprise Portal > Logistics > Stock Overview</div>
+              <h1 class="page-title">Inventory Operations & Analytics</h1>
+            </div>
+            <div class="quick-filters">
+              <button class="filter-chip active" onclick="filterByStockStatus('ALL', this)">All Warehouses</button>
+              <button class="filter-chip" onclick="filterByStockStatus('Low Stock', this)">Critical Thresholds</button>
+              <button class="filter-chip" onclick="filterByStockStatus('Optimal', this)">Optimal Stock</button>
+            </div>
+          </div>
+
+          <section class="kpi-grid">
+            <article class="kpi-card">
+              <span class="kpi-label">TOTAL ACTIVE SKUs</span>
+              <div class="kpi-metric" id="kpi-total-skus">3</div>
+              <div class="kpi-trend trend-positive">↑ Synced with PostgreSQL</div>
+            </article>
+            <article class="kpi-card">
+              <span class="kpi-label">GROSS STOCK VALUE</span>
+              <div class="kpi-metric">$1,842,500</div>
+              <div class="kpi-trend trend-neutral">Valuation: FIFO Basis</div>
+            </article>
+            <article class="kpi-card">
+              <span class="kpi-label">CRITICAL REORDER ALERTS</span>
+              <div class="kpi-metric metric-danger" id="kpi-low-stock">1 Item</div>
+              <div class="kpi-trend trend-negative">Requires immediate PO</div>
+            </article>
+            <article class="kpi-card">
+              <span class="kpi-label">SYNC INTEGRITY</span>
+              <div class="kpi-metric">99.98%</div>
+              <div class="kpi-trend trend-positive">PostgreSQL Connected</div>
+            </article>
+          </section>
+
+          <section class="table-section">
+            <div class="table-toolbar">
+              <h2 class="section-heading">Active Warehouse Inventory Catalog</h2>
+              <div class="toolbar-controls">
+                <select class="control-select" id="category-filter-select">
+                  <option value="All">Filter Category: All</option>
+                  <option value="Hardware">Hardware</option>
+                  <option value="Compute Hardware">Compute Hardware</option>
+                  <option value="Networking Devices">Networking Devices</option>
+                  <option value="Power Infrastructure">Power Infrastructure</option>
+                </select>
+                <button class="btn btn-secondary" onclick="exportInventoryCSV()">Export CSV</button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>SKU IDENTIFIER</th>
+                    <th>ITEM NAME</th>
+                    <th>CATEGORY</th>
+                    <th>WAREHOUSE BIN</th>
+                    <th>AVAILABLE QTY</th>
+                    <th>REORDER POINT</th>
+                    <th>STATUS</th>
+                    <th class="text-right">ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody id="inventory-table-body">
+                  <tr>
+                    <td colspan="8" style="text-align:center; padding: 2rem; color: #94a3b8;">Loading live inventory from PostgreSQL...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <footer class="table-pagination">
+              <span class="pagination-info" id="pagination-summary">Showing live database entries</span>
+              <div class="pagination-buttons">
+                <button class="btn btn-secondary btn-sm" onclick="fetchInventoryFromBackend()">Refresh Sync</button>
+              </div>
+            </footer>
+          </section>
+        </div>
+
+        <!-- 2. PURCHASE ORDERS VIEW -->
+        <div id="view-orders" class="view-panel">
+          <div class="content-header">
+            <div>
+              <div class="breadcrumbs">Enterprise Portal > Procurement > Requisition</div>
+              <h1 class="page-title">Purchase Orders & Inbound Shipments</h1>
+            </div>
+          </div>
+          <section class="table-section">
+            <div class="table-toolbar">
+              <h2 class="section-heading">Active Purchase Order Manifest</h2>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>PO NUMBER</th>
+                    <th>VENDOR</th>
+                    <th>DESTINATION</th>
+                    <th>TOTAL LINE ITEMS</th>
+                    <th>AMOUNT</th>
+                    <th>STATUS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="badge-code">PO-2026-8801</span></td>
+                    <td><strong>Dell Global Logistics</strong></td>
+                    <td>Warehouse Alpha (Austin)</td>
+                    <td>14 Servers</td>
+                    <td>$114,800</td>
+                    <td><span class="badge badge-success">Dispatched</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <!-- 3. SUPPLIERS DIRECTORY VIEW -->
+        <div id="view-suppliers" class="view-panel">
+          <div class="content-header">
+            <div>
+              <div class="breadcrumbs">Enterprise Portal > Procurement > Suppliers</div>
+              <h1 class="page-title">Authorized Vendor Directory</h1>
+            </div>
+          </div>
+          <section class="table-section">
+            <div class="table-toolbar">
+              <h2 class="section-heading">Active Supplier Master List</h2>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>SUPPLIER CODE</th>
+                    <th>CORPORATE ENTITY</th>
+                    <th>TIER CATEGORY</th>
+                    <th>STATUS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="badge-code">VND-DL-01</span></td>
+                    <td><strong>Dell Enterprise Corp</strong></td>
+                    <td>Tier 1 (Core Hardware)</td>
+                    <td><span class="badge badge-success">Active</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <!-- 4. AUDIT LOGS VIEW -->
+        <div id="view-audit" class="view-panel">
+          <div class="content-header">
+            <div>
+              <div class="breadcrumbs">Enterprise Portal > Governance > Compliance</div>
+              <h1 class="page-title">System Audit & Compliance Trails</h1>
+            </div>
+          </div>
+          <section class="table-section">
+            <div class="table-toolbar">
+              <h2 class="section-heading">Database Activity Log</h2>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>OPERATOR</th>
+                    <th>ROLE</th>
+                    <th>ACTION EXECUTED</th>
+                    <th>STATUS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>vijay.admin</strong></td>
+                    <td>Superuser</td>
+                    <td>CRUD Operations Enabled on PostgreSQL</td>
+                    <td><span class="badge badge-success">Verified</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <!-- 5. RBAC SETTINGS VIEW -->
+        <div id="view-settings" class="view-panel">
+          <div class="content-header">
+            <div>
+              <div class="breadcrumbs">Enterprise Portal > Security > Access Control</div>
+              <h1 class="page-title">Role-Based Access Control (RBAC)</h1>
+            </div>
+          </div>
+          <section class="table-section">
+            <div class="table-toolbar">
+              <h2 class="section-heading">Configured User Permission Matrices</h2>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ROLE NAME</th>
+                    <th>VIEW INVENTORY</th>
+                    <th>MUTATE STOCK</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Super Administrator</strong></td>
+                    <td><span class="badge badge-success">Full Access</span></td>
+                    <td><span class="badge badge-success">Granted</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- CREATE / EDIT INVENTORY MODAL -->
+  <div id="crud-modal-backdrop" class="erp-modal-backdrop">
+    <div class="erp-modal">
+      <div class="erp-modal-header">
+        <h3 id="crud-modal-title">Add New Inventory SKU</h3>
+        <button class="erp-modal-close" onclick="closeCrudModal()">×</button>
+      </div>
+      <form id="crud-item-form" onsubmit="handleCrudFormSubmit(event)">
+        <div class="erp-modal-body">
+          <input type="hidden" id="form-item-id" />
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label for="form-sku">SKU Identifier *</label>
+              <input type="text" id="form-sku" placeholder="e.g., SKU-NET-9050" required />
+            </div>
+            <div class="form-field">
+              <label for="form-category">Category *</label>
+              <select id="form-category" required>
+                <option value="Hardware">Hardware</option>
+                <option value="Compute Hardware">Compute Hardware</option>
+                <option value="Networking Devices">Networking Devices</option>
+                <option value="Power Infrastructure">Power Infrastructure</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="form-name">Item Name *</label>
+            <input type="text" id="form-name" placeholder="e.g., Juniper EX4300 Switch" required />
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label for="form-bin">Warehouse Bin</label>
+              <input type="text" id="form-bin" placeholder="e.g., WH-B / Rack-09" value="WH-A / Bin-01" />
+            </div>
+            <div class="form-field">
+              <label for="form-qty">Available Quantity *</label>
+              <input type="number" id="form-qty" min="0" value="10" required />
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label for="form-reorder">Reorder Point *</label>
+              <input type="number" id="form-reorder" min="0" value="5" required />
+            </div>
+            <div class="form-field">
+              <label>Auto Status Preview</label>
+              <input type="text" value="Auto-calculated from Qty" disabled />
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="form-description">Technical Description</label>
+            <textarea id="form-description" rows="2" placeholder="Hardware specifications or warehouse notes..."></textarea>
+          </div>
+        </div>
+        <div class="erp-modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeCrudModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="crud-submit-btn">Save Record</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ITEM AUDIT / DETAILS MODAL -->
+  <div id="detail-modal-backdrop" class="erp-modal-backdrop">
+    <div class="erp-modal">
+      <div class="erp-modal-header">
+        <h3>Item Database Record Details</h3>
+        <button class="erp-modal-close" onclick="closeDetailModal()">×</button>
+      </div>
+      <div class="erp-modal-body" id="detail-modal-content"></div>
+      <div class="erp-modal-footer">
+        <button type="button" class="btn btn-primary" onclick="closeDetailModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICATION TOAST -->
+  <div id="toast-banner" class="toast-banner"></div>
+
+  <script>
+    const API_BASE = 'https://enterprise-inventory-api.onrender.com/api/v1';
+    let cachedItems = [];
+    let activeStatusFilter = 'ALL';
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast-banner');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    function switchView(viewId, element) {
+      document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active-view'));
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      const activePanel = document.getElementById('view-' + viewId);
+      if (activePanel) activePanel.classList.add('active-view');
+      element.classList.add('active');
+    }
+
+    // Obtain valid JWT session token automatically for protected mutations (POST/PUT/DELETE)
+    async function getAuthToken() {
+      let token = localStorage.getItem('coreerp_jwt');
+      if (token) return token;
+
+      const creds = { username: 'vijay_admin', password: 'Password123!' };
+      try {
+        let res = await fetch(`${API_BASE}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(creds)
+        });
+        let data = await res.json();
+
+        if (!data.success) {
+          await fetch(`${API_BASE}/auth/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(creds)
+          });
+          res = await fetch(`${API_BASE}/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(creds)
+          });
+          data = await res.json();
+        }
+
+        if (data.token) {
+          localStorage.setItem('coreerp_jwt', data.token);
+          return data.token;
+        }
+      } catch (e) {
+        console.error('Auth error:', e);
+      }
+      return null;
+    }
+
+    // READ: Fetch all items (with optional Search and Category parameters)
+    async function fetchInventoryFromBackend() {
+      const searchVal = document.getElementById('global-search-input')?.value.trim() || '';
+      const categoryVal = document.getElementById('category-filter-select')?.value || 'All';
+
+      const params = new URLSearchParams();
+      if (searchVal) params.append('search', searchVal);
+      if (categoryVal && categoryVal !== 'All') params.append('category', categoryVal);
+
+      const url = `${API_BASE}/inventory${params.toString() ? '?' + params.toString() : ''}`;
+
+      try {
+        const response = await fetch(url);
+        const result = await response.json();
+
+        if (result.success) {
+          cachedItems = result.data;
+          renderInventoryTable(cachedItems);
+        }
+      } catch (err) {
+        console.warn('Backend unreachable:', err);
+        showToast('Connecting to cloud database...');
+      }
+    }
+
+    function renderInventoryTable(items) {
+      const tbody = document.getElementById('inventory-table-body');
+      if (!tbody) return;
+
+      const filtered = activeStatusFilter === 'ALL'
+        ? items
+        : items.filter(i => i.status === activeStatusFilter);
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align:center; padding: 2rem; color: #94a3b8;">
+              No inventory records match the active filter.
+            </td>
+          </tr>`;
+      } else {
+        tbody.innerHTML = filtered.map(item => `
+          <tr>
+            <td><span class="badge-code">${item.sku}</span></td>
+            <td><strong>${item.name}</strong></td>
+            <td>${item.category}</td>
+            <td>${item.bin}</td>
+            <td>${item.qty} Units</td>
+            <td>${item.reorder_point ?? item.reorderPoint ?? 0} Units</td>
+            <td>
+              <span class="badge ${item.status === 'Optimal' ? 'badge-success' : (item.status === 'Low Stock' ? 'badge-danger' : 'badge-warning')}">
+                ${item.status}
+              </span>
+            </td>
+            <td class="text-right">
+              <button class="action-btn" onclick="openEditModal('${item.id}')">Edit</button>
+              <button class="action-btn" onclick="openDetailModal('${item.id}')">Audit</button>
+              <button class="action-btn action-btn-danger" onclick="deleteInventoryItem('${item.id}', '${item.sku}')">Delete</button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      // Update KPI Counters
+      const totalEl = document.getElementById('kpi-total-skus');
+      const lowEl = document.getElementById('kpi-low-stock');
+      const summaryEl = document.getElementById('pagination-summary');
+
+      if (totalEl) totalEl.textContent = items.length.toLocaleString();
+      if (lowEl) {
+        const lowCount = items.filter(i => i.status === 'Low Stock').length;
+        lowEl.textContent = `${lowCount} ${lowCount === 1 ? 'Item' : 'Items'}`;
+      }
+      if (summaryEl) {
+        summaryEl.textContent = `Showing ${filtered.length} of ${items.length} PostgreSQL entries`;
+      }
+    }
+
+    function filterByStockStatus(status, btn) {
+      activeStatusFilter = status;
+      document.querySelectorAll('#view-dashboard .filter-chip').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      renderInventoryTable(cachedItems);
+    }
+
+    // CREATE MODAL
+    function openCreateModal() {
+      document.getElementById('crud-modal-title').textContent = 'Add New Inventory SKU';
+      document.getElementById('crud-submit-btn').textContent = 'Create Record';
+      document.getElementById('form-item-id').value = '';
+      document.getElementById('crud-item-form').reset();
+      document.getElementById('crud-modal-backdrop').classList.add('open');
+    }
+
+    // EDIT (UPDATE) MODAL
+    function openEditModal(id) {
+      const item = cachedItems.find(i => i.id === id);
+      if (!item) return;
+
+      document.getElementById('crud-modal-title').textContent = `Edit SKU: ${item.sku}`;
+      document.getElementById('crud-submit-btn').textContent = 'Update Record';
+      document.getElementById('form-item-id').value = item.id;
+      document.getElementById('form-sku').value = item.sku;
+      document.getElementById('form-name').value = item.name;
+      document.getElementById('form-category').value = item.category;
+      document.getElementById('form-bin').value = item.bin;
+      document.getElementById('form-qty').value = item.qty;
+      document.getElementById('form-reorder').value = item.reorder_point ?? item.reorderPoint ?? 5;
+      document.getElementById('form-description').value = item.description || '';
+      document.getElementById('crud-modal-backdrop').classList.add('open');
+    }
+
+    function closeCrudModal() {
+      document.getElementById('crud-modal-backdrop').classList.remove('open');
+    }
+
+    // SUBMIT CREATE OR UPDATE
+    async function handleCrudFormSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById('form-item-id').value;
+      const isEdit = Boolean(id);
+
+      const payload = {
+        sku: document.getElementById('form-sku').value.trim(),
+        name: document.getElementById('form-name').value.trim(),
+        category: document.getElementById('form-category').value,
+        bin: document.getElementById('form-bin').value.trim() || 'WH-General',
+        qty: Number(document.getElementById('form-qty').value),
+        reorderPoint: Number(document.getElementById('form-reorder').value),
+        description: document.getElementById('form-description').value.trim()
+      };
+
+      const token = await getAuthToken();
+      if (!token) {
+        showToast('Authentication failed. Check backend connection.');
+        return;
+      }
+
+      const url = isEdit ? `${API_BASE}/inventory/${id}` : `${API_BASE}/inventory`;
+      const method = isEdit ? 'PUT' : 'POST';
+
+      try {
+        const res = await fetch(url, {
+          method,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+
+        if (result.success) {
+          closeCrudModal();
+          showToast(isEdit ? `Updated ${payload.sku} in PostgreSQL` : `Created ${payload.sku} in PostgreSQL`);
+          fetchInventoryFromBackend();
+        } else {
+          showToast(`Error: ${result.message}`);
+        }
+      } catch (err) {
+        showToast('Network error saving record.');
+      }
+    }
+
+    // DELETE ITEM
+    async function deleteInventoryItem(id, sku) {
+      if (!confirm(`Are you sure you want to permanently delete ${sku} from PostgreSQL?`)) {
+        return;
+      }
+
+      const token = await getAuthToken();
+      if (!token) return;
+
+      try {
+        const res = await fetch(`${API_BASE}/inventory/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const result = await res.json();
+
+        if (result.success) {
+          showToast(`Deleted ${sku} from database`);
+          fetchInventoryFromBackend();
+        } else {
+          showToast(`Delete failed: ${result.message}`);
+        }
+      } catch (err) {
+        showToast('Network error deleting record.');
+      }
+    }
+
+    // DETAIL / AUDIT MODAL (GET /:id)
+    async function openDetailModal(id) {
+      try {
+        const res = await fetch(`${API_BASE}/inventory/${id}`);
+        const result = await res.json();
+        if (!result.success) return;
+
+        const item = result.data;
+        document.getElementById('detail-modal-content').innerHTML = `
+          <div class="detail-row"><span>Database UUID</span><code>${item.id}</code></div>
+          <div class="detail-row"><span>SKU Identifier</span><strong>${item.sku}</strong></div>
+          <div class="detail-row"><span>Item Name</span><strong>${item.name}</strong></div>
+          <div class="detail-row"><span>Category</span><span>${item.category}</span></div>
+          <div class="detail-row"><span>Warehouse Bin</span><span>${item.bin}</span></div>
+          <div class="detail-row"><span>Available Qty</span><span>${item.qty} Units</span></div>
+          <div class="detail-row"><span>Reorder Point</span><span>${item.reorder_point ?? 0} Units</span></div>
+          <div class="detail-row"><span>Stock Status</span><span>${item.status}</span></div>
+          <div class="detail-row"><span>Created By</span><span>${item.created_by || 'System'}</span></div>
+          <div class="detail-row" style="border:none; flex-direction:column; gap:0.35rem;">
+            <span>Description</span>
+            <p style="margin:0; color:#e2e8f0; font-size:0.85rem;">${item.description || 'N/A'}</p>
+          </div>
+        `;
+        document.getElementById('detail-modal-backdrop').classList.add('open');
+      } catch (err) {
+        showToast('Failed to load item details.');
+      }
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detail-modal-backdrop').classList.remove('open');
+    }
+
+    function exportInventoryCSV() {
+      if (!cachedItems.length) return;
+      const headers = ['SKU', 'Name', 'Category', 'Bin', 'Qty', 'ReorderPoint', 'Status'];
+      const rows = cachedItems.map(i => [i.sku, `"${i.name}"`, i.category, i.bin, i.qty, i.reorder_point ?? 0, i.status]);
+      const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'coreerp_inventory_export.csv';
+      a.click();
+    }
+
+    // Event listeners for Search & Category Filtering
+    let searchTimer;
+    document.getElementById('global-search-input').addEventListener('input', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(fetchInventoryFromBackend, 300);
+    });
+
+    document.getElementById('category-filter-select').addEventListener('change', fetchInventoryFromBackend);
+
+    document.addEventListener('DOMContentLoaded', fetchInventoryFromBackend);
+  </script>
+</body>
+</html>
         if (result.success && result.data.length > 0) {
           const tbody = document.querySelector('#view-dashboard .data-table tbody');
           if (!tbody) return;
